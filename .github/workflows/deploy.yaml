@@ -2,9 +2,9 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["main"] # Trigger deployment on pushes to main
+    branches: ["main"]
 
-  workflow_dispatch: # Allows manual trigger from the Actions tab
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -22,8 +22,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v5
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -31,7 +31,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.' # Serves your root directory (index.html, css, js)
+          path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment
