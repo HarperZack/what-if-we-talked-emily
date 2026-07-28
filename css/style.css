@@ -192,7 +192,7 @@ html {
 }
 
 /* ==========================================================================
-   PHOTOS AND IMAGES
+   PHOTOS AND VIDEOS
    ========================================================================== */
 
 #image-gallery {
@@ -208,6 +208,50 @@ html {
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#video-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Slightly wider default for 16:9 videos */
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+}
+
+/* Individual video card wrapper (if using a container div per video) */
+.video-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.video-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Video element styling */
+.video-card video,
+#video-gallery video {
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Maintains widescreen ratio without harsh cropping */
+  display: block;
+  object-fit: cover;
+  background-color: #000;
+}
+
+/* Optional title bar below or on top of video */
+.video-title {
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ==========================================================================

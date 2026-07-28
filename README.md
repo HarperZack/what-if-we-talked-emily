@@ -13,3 +13,6 @@ Zack Harper - harper.zack@gmail.com
 - Set up secrets in github to hook into Google Drive API to get images from specified folder
 - Fixed auto deploy to query for new images
 - Added dummy images and gallery.json files to test locally
+- Video and Picture parsing now exists in separate places for even more control
+- Added video CSS in Photos and Videos section
+- Refactored setup function to catch more errors

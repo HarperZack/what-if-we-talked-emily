@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
-		"sync": "node js/get-images.js"
+		"sync": "node js/get-sensitive-data.js"
 	},
 	"dependencies": {
 		"googleapis": "^140.0.0"
