@@ -5,3 +5,5 @@ Zack Harper - harper.zack@gmail.com
 - Nav works and sits on top 
 - No APIs or other connectivity is setup
 - Going through plain text (config.js) for updating HTML elements
+- Changed header to stay with scroll/focus
+- Setup auto deploy on push to main
