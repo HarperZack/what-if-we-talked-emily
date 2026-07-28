@@ -56,7 +56,7 @@ async function downloadGallery() {
     manifest.push({
       id: file.id,
       name: file.name,
-      url: `./images/gallery/${safeFilename}`
+      url: `assets/images/${safeFilename}`
     });
   }
 
