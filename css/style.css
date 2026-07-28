@@ -192,6 +192,25 @@ html {
 }
 
 /* ==========================================================================
+   PHOTOS AND IMAGES
+   ========================================================================== */
+
+#image-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+#image-gallery img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
    BUTTONS & CALL TO ACTIONS
    ========================================================================== */
 .cta-section {

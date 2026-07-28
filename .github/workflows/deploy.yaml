@@ -28,6 +28,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      # --- GOOGLE DRIVE SYNC STEPS START ---
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Sync Images from Google Drive
+        env:
+          GDRIVE_SERVICE_ACCOUNT_KEY: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_KEY }}
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
+        run: npm run sync
+      # --- GOOGLE DRIVE SYNC STEPS END ---
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
