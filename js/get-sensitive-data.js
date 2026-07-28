@@ -29,17 +29,19 @@ async function loadMedia() {
 
     console.log('Fetching file list from Google Drive...');
     
-    const response = await drive.files.list({
-        q: `'${folderId}' in parents and trashed = false and (mimeType starts with 'image/' or mimeType starts with 'video/')`,
-        fields: 'files(id, name, mimeType)',
-        pageSize: MEDIA_DOWNLOAD_LIMIT
-    });
+    // Updated Drive query to include application/pdf
+	const response = await drive.files.list({
+		q: `'${folderId}' in parents and trashed = false and (mimeType starts with 'image/' or mimeType starts with 'video/' or mimeType = 'application/pdf')`,
+		fields: 'files(id, name, mimeType)',
+		pageSize: MEDIA_DOWNLOAD_LIMIT
+	});
 
     const files = response.data.files || [];
-    console.log(`Found ${files.length} media files (images/videos).`);
+    console.log(`Found ${files.length} media files (images/videos/PDFs).`);
 
     const photos = [];
     const videos = [];
+    const pdfs = [];
 
     for (const file of files) {
         const safeFilename = file.name.replace(/[\/\\:?*"<>|]/g, '_').replace(/\s+/g, '_');
@@ -67,10 +69,18 @@ async function loadMedia() {
             videos.push(mediaObject);
         } else if (file.mimeType.startsWith('image/')) {
             photos.push(mediaObject);
+        } else if (file.mimeType === 'application/pdf') {
+            // Generate PNG thumbnail from Page 1 of the downloaded PDF
+            const thumbUrl = await generatePdfThumbnail(filePath, safeFilename);
+            
+            pdfs.push({
+                ...mediaObject,
+                thumbnailUrl: thumbUrl
+            });
         }
     }
 
-    return { photos, videos };
+    return { photos, videos, pdfs };
 }
 
 
@@ -91,7 +101,7 @@ async function buildManifest() {
     console.log('Starting sync process...');
 
     // Step A: Fetch media assets
-    const { photos, videos } = await loadMedia();
+    const { photos, videos, pdfs } = await loadMedia();
 
     // Step B: Fetch and format Google Form details
     const formData = getFormMetadata();
@@ -101,12 +111,44 @@ async function buildManifest() {
         lastUpdated: new Date().toISOString(),
         ...formData,
         photos,
-        videos
+        videos,
+        pdfs
     };
 
     fs.writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2));
 
-    console.log(`Manifest saved successfully! (${photos.length} photos, ${videos.length} videos)`);
+    console.log(`Manifest saved successfully! (${photos.length} photos, ${videos.length} videos, ${pdfs.length} PDFs)`);
+}
+
+async function generatePdfThumbnail(pdfFilePath, safeFilename) {
+	const parsedPath = path.parse(safeFilename);
+	const thumbFilename = `${parsedPath.name}_thumb.png`;
+	const thumbFilePath = path.join(OUTPUT_DIR, thumbFilename);
+
+	try {
+		const pdfModule = await import('pdf-to-img');
+		
+		// Grab the pdf function whether it's exported as .pdf or as default
+		const pdf = pdfModule.pdf || pdfModule.default;
+
+		if (typeof pdf !== 'function') {
+			throw new Error(`pdf export is ${typeof pdf}, expected a function.`);
+		}
+
+		const document = await pdf(pdfFilePath, { scale: 1.5 });
+		
+		// Only uses first page as thumbnail
+		for await (const page of document) {
+			fs.writeFileSync(thumbFilePath, page);
+			break;
+		}
+
+		console.log(`Thumbnail generated: ${thumbFilename}`);
+		return `assets/images/${thumbFilename}`;
+	} catch (err) {
+		console.error(`Failed to generate thumbnail for ${safeFilename}:`, err);
+		return null;
+	}
 }
 
 // Execute build pipeline

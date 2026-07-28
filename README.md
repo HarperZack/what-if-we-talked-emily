@@ -34,3 +34,6 @@ Variables needed in .env (as strings) or GitHub Repository Secrets:
 - Video and Picture parsing now exists in separate places for even more control
 - Added video CSS in Photos and Videos section
 - Refactored setup function to catch more errors
+- Fade in to cover unloaded JS assets and elements
+- More defaults and more consistent setup functions
+- More constants for toggleability
