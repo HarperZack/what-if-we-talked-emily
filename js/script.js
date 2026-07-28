@@ -16,6 +16,9 @@ function setup(){
     for (const [key, value] of Object.entries(configs.HEADER_NAV)) {
         setPageText(key, value);
     }
+
+    // Import and Display Photos from linked Google Drive Folder
+    loadPhotos();
 };
 
 function setPageText(elementPlaceholderName, input){
@@ -51,10 +54,9 @@ async function loadPhotos() {
 		photos.forEach(photo => {
 			const img = document.createElement('img');
 			img.src = photo.url.startsWith('./') ? photo.url : `./${photo.url}`;
-			img.alt = photo.name;       // Original filename used as alt text
-			img.loading = 'lazy';       // Native browser lazy-loading for better performance
+			img.alt = photo.name;
+			img.loading = 'lazy';
 
-			// Append image to your gallery container
 			galleryContainer.appendChild(img);
 		});
 
@@ -63,6 +65,3 @@ async function loadPhotos() {
 		galleryContainer.innerHTML = '<p>Unable to load images at this time.</p>';
 	}
 }
-
-// Automatically run when the DOM is loaded
-document.addEventListener('DOMContentLoaded', loadPhotos);

@@ -1,7 +1,12 @@
-# ------------------------------------------------------------------------------
-# ENVIRONMENT & SECRETS (NEVER COMMIT)
-# ------------------------------------------------------------------------------
+# Environment and Secrets files
 .env
 .env.local
 .env.*.local
-*.env
+
+# Dependencies (NEVER commit this!)
+node_modules/
+
+# Ignore local test images and generated JSON so local runs don't get committed
+assets/images/*
+!assets/images/.gitkeep
+assets/gallery.json

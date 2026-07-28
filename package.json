@@ -1,11 +1,14 @@
 {
-  "name": "what-if-we-talked",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "sync": "node js/get-images.js"
-  },
-  "dependencies": {
-    "googleapis": "^140.0.0"
-  }
+	"name": "what-if-we-talked",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"sync": "node js/get-images.js"
+	},
+	"dependencies": {
+		"googleapis": "^140.0.0"
+	},
+	"devDependencies": {
+		"dotenv": "^17.4.2"
+	}
 }
